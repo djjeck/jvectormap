@@ -456,10 +456,12 @@
 
     this.applyTransform();
 
-    this.colorScale = new ColorScale(params.scaleColors, params.normalizeFunction, params.valueMin, params.valueMax);
-    if (params.values) {
-      this.values = params.values;
-      this.setValues(params.values);
+    if(!params.colors) {
+      this.colorScale = new ColorScale(params.scaleColors, params.normalizeFunction, params.valueMin, params.valueMax);
+      if (params.values) {
+        this.values = params.values;
+        this.setValues(params.values);
+      }
     }
 
     this.bindZoomButtons();
@@ -515,16 +517,18 @@
       this.colorScale.setMin(min);
       this.colorScale.setMax(max);
 
-      var colors = {};
-      for (cc in values) {
-        val = parseFloat(values[cc]);
-        if (val) {
-          colors[cc] = this.colorScale.getColor(val);
-        } else {
-          colors[cc] = this.color;
+      if(this.colorScale) {
+        var colors = {};
+        for (cc in values) {
+          val = parseFloat(values[cc]);
+          if (val) {
+            colors[cc] = this.colorScale.getColor(val);
+          } else {
+            colors[cc] = this.color;
+          }
         }
+        this.setColors(colors);
       }
-      this.setColors(colors);
       this.values = values;
     },
 
